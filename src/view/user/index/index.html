@@ -1,0 +1,111 @@
+{extend name="../../admin/view/table"} {block name="button"}
+<!--{if auth("remove")}-->
+<a data-confirm="{:lang('确定要删除这些用户吗？')}" data-table-id="UserTable" data-action='{:url("remove")}' data-rule="id#{id}" class="layui-btn layui-btn-sm layui-btn-primary">{:lang('批量删除')}</a>
+<!--{/if}-->
+{/block} {block name="content"}
+<div class="think-box-shadow">
+    {include file='user/index/index_search'}
+    <table id="UserTable" data-url="{:sysuri('index')}{notempty name='get.id'}?id={$get.id}{/notempty}" data-target-search="form.form-search"></table>
+</div>
+
+<script>
+    $(function () {
+        $("#UserTable").layTable({
+            even: true,
+            height: "full",
+            sort: { field: "id", type: "desc" },
+            cols: [
+                [
+                    { checkbox: true, fixed: true },
+                    { field: "id", title: "ID", width: 70, align: "center", sort: true },
+                    { field: "avatar_url", title: '{:lang("头像")}', width: 65, align: "center", templet: "#HeadimgTpl" },
+                    { field: "nickname", title: '{:lang("昵称")}', minWidth: 150 },
+                    { field: "phone", title: '{:lang("手机号")}', width: 140, align: "center" },
+                    { field: "openid", title: "OpenID", minWidth: 200 },
+                    { field: "vip_time", title: '{:lang("会员到期")}', width: 160, align: "center", templet: "#VipExpireTpl", sort: true },
+                    { field: "score", title: '{:lang("积分")}', width: 100, align: "center", sort: true },
+                    { field: "status", title: '{:lang("状态")}', width: 120, align: "center", templet: "#StatusSwitchTpl" },
+                    { field: "create_at", title: '{:lang("注册时间")}', width: 160, align: "center", sort: true },
+                    { field: "pid", title: '{:lang("上级")}', width: 100, align: "center", templet: "#PidUserTpl" },
+                    { field: "device_model", title: '{:lang("设备")}', width: 180, align: "center", templet: "#DeviceInfoTpl" },
+                    { field: "sdk_version", title: 'SDK {:lang("版本")}', width: 110, align: "center" },
+                    { field: "app_version", title: '{:lang("小程序")}', width: 100, align: "center" },
+                    { field: "app_channel", title: '{:lang("渠道")}', width: 90, align: "center" },
+                    { toolbar: "#toolbar", title: '{:lang("操作面板")}', width: 200, align: "left" },
+                ],
+            ],
+        });
+        layui.form.on("switch(StatusSwitch)", function (obj) {
+            var data = { id: obj.value, status: obj.elem.checked > 0 ? 1 : 0 };
+            $.form.load(
+                "{:url('state')}",
+                data,
+                "post",
+                function (ret) {
+                    if (ret.code < 1)
+                        $.msg.error(ret.info, 3, function () {
+                            $("#UserTable").trigger("reload");
+                        });
+                    else $("#UserTable").trigger("reload");
+                    return false;
+                },
+                false,
+            );
+        });
+    });
+</script>
+
+<script type="text/html" id="StatusSwitchTpl">
+    <!--{if auth("state")}-->
+    <input type="checkbox" value="{{d.id}}" lay-skin="switch" lay-text="{:lang('正常')}|{:lang('禁用')}" lay-filter="StatusSwitch" {{-d.status />
+    0?'checked':''}}>
+    <!--{else}-->
+    {{-d.status ? '
+    <b class="color-green">{:lang("正常")}</b>
+    ' : '
+    <b class="color-red">{:lang("禁用")}</b>
+    '}}
+    <!--{/if}-->
+</script>
+
+<script type="text/html" id="VipExpireTpl">
+    {{# if(d.vip_time > 0){ }} {{# if(d.vip_time * 1000 < Date.now()){ }}
+    <span class="color-red">{{layui.util.toDateString(d.vip_time * 1000, 'yyyy-MM-dd')}}</span>
+    {{# }else{ }}
+    <span class="color-green">{{layui.util.toDateString(d.vip_time * 1000, 'yyyy-MM-dd')}}</span>
+    {{# } }} {{# }else{ }}
+    <span class="color-gray">{:lang('未开通')}</span>
+    {{# } }}
+</script>
+
+<script type="text/html" id="HeadimgTpl">
+    <div>{{-$.layTable.showImage(d.avatar_url)}}</div>
+</script>
+
+<script type="text/html" id="toolbar">
+    <!--{if auth("edit")}-->
+    <a class="layui-btn layui-btn-sm" data-title="{:lang('编辑用户')}" data-modal='{:url("edit")}?id={{d.id}}'>{:lang('编 辑')}</a>
+    <!--{/if}-->
+    <a class="layui-btn layui-btn-sm layui-btn-normal" data-width="80%" data-height="80%" data-offset="10%" data-title="{:lang('登录设备')} - {{d.id}}" data-modal='{:url("@mini/user.token/device")}?user_id={{d.id}}'>{:lang('设备')}</a>
+
+    <!--{if auth("remove")}-->
+    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="{:lang('确定要删除吗？')}" data-action="{:url('remove')}" data-value="id#{{d.id}}">{:lang('删 除')}</a>
+    <!--{/if}-->
+</script>
+
+<script type="text/html" id="PidUserTpl">
+    {{# if(d.pid){ }}
+    <a class="layui-badge layui-bg-blue" data-open="{:url('@mini/user/index')}?id={{d.pid}}" title="{:lang('查看上级')}">{{d.pid}}</a>
+    {{# }else{ }}
+    <span class="color-gray">-</span>
+    {{# } }}
+</script>
+
+<script type="text/html" id="DeviceInfoTpl">
+    {{# if(d.device_model){ }}
+    <span class="layui-badge layui-bg-gray" title="OS: {{d.device_system}}">{{d.device_model}}</span>
+    {{# }else{ }}
+    <span class="color-gray">-</span>
+    {{# } }}
+</script>
+{/block}

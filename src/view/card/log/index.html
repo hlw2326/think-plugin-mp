@@ -1,0 +1,48 @@
+{extend name="../../admin/view/table"} {block name="button"} {/block} {block name="content"}
+<div class="think-box-shadow">
+    {include file='card/log/index_search'}
+    <table id="CardUseLogTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
+</div>
+
+<script>
+    $(function () {
+        $("#CardUseLogTable").layTable({
+            even: true,
+            height: "full",
+            sort: { field: "id", type: "desc" },
+            cols: [
+                [
+                    { checkbox: true, fixed: true },
+                    { field: "id", title: "ID", width: 70, align: "center", sort: true },
+                    { field: "card_type", title: '{:lang("卡密类型")}', width: 120, align: "center", templet: "#CardTypeTpl" },
+                    { field: "card_code", title: '{:lang("卡密码")}', minWidth: 180, align: "center", templet: "<div><code>{{d.card_code}}</code></div>" },
+                    { field: "user_id", title: '{:lang("用户ID")}', width: 120, align: "center" },
+                    { field: "use_data", title: '{:lang("使用内容")}', width: 130, align: "center", templet: "#UseDataTpl" },
+                    { field: "use_time", title: '{:lang("使用时间")}', width: 160, align: "center", sort: true, templet: '<div>{{d.use_time > 0 ? layui.util.toDateString(d.use_time * 1000, "yyyy-MM-dd HH:mm:ss") : "-"}}</div>' },
+                    { field: "ip_address", title: '{:lang("IP地址")}', width: 130, align: "center" },
+                    { field: "create_at", title: '{:lang("记录时间")}', width: 160, align: "center", sort: true },
+                ],
+            ],
+        });
+    });
+</script>
+
+<script type="text/html" id="CardTypeTpl">
+    {{# if(d.card_type == 1){ }}
+    <span class="layui-badge layui-bg-blue">{:lang('积分卡密')}</span>
+    {{# } else if(d.card_type == 2){ }}
+    <span class="layui-badge layui-bg-green">{:lang('会员卡密')}</span>
+    {{# } else { }}
+    <span class="layui-badge layui-bg-gray">{:lang('未知')}</span>
+    {{# } }}
+</script>
+
+<script type="text/html" id="UseDataTpl">
+    {{# try { var d2 = JSON.parse(d.use_data); }} {{# if(d.card_type == 1){ }}
+    <span>{:lang('积分')}：{{d2.points||0}}</span>
+    {{# } else { }}
+    <span>{:lang('天数')}：{{d2.vip_days||0}}{:lang('天')}</span>
+    {{# } }} {{# } catch(e) { }} - {{# } }}
+</script>
+
+{/block}

@@ -1,0 +1,57 @@
+{extend name="../../admin/view/table"}
+
+{block name="button"}
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='user/score_log/index_search'}
+    <table id="UserScoreLogTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
+</div>
+
+<label class="layui-hide"><textarea id="SourcesData">{:json_encode($sources, JSON_UNESCAPED_UNICODE)}</textarea></label>
+
+<script>
+    $.scoreSourceLabel = (function () {
+        var sources = JSON.parse($('#SourcesData').text());
+        return function (source) {
+            var item = sources[source] || {label: source, 'class': 'layui-bg-gray'};
+            return '<span class="layui-badge ' + item['class'] + '">' + item.label + '</span>';
+        };
+    })();
+
+    $(function () {
+        $('#UserScoreLogTable').layTable({
+            even: true, height: 'full',
+            sort: {field: 'id', type: 'desc'},
+            cols: [[
+                {field: 'id', title: 'ID', width: 70, align: 'center', sort: true},
+                {field: 'user_id', title: '{:lang("用户ID")}', width: 180, align: 'center', templet: '#UserIdTpl'},
+                {field: 'source', title: '{:lang("来源")}', width: 130, align: 'center', templet: '#SourceTpl'},
+                {field: 'change', title: '{:lang("变动积分")}', width: 120, align: 'center', templet: '#ChangeTpl'},
+                {field: 'balance', title: '{:lang("变动后余额")}', width: 130, align: 'center'},
+                {field: 'remark', title: '{:lang("备注")}', minWidth: 160},
+                {field: 'admin_id', title: '{:lang("操作人")}', width: 100, align: 'center'},
+                {field: 'create_at', title: '{:lang("记录时间")}', width: 160, align: 'center', sort: true}
+            ]]
+        });
+    });
+</script>
+
+<script type="text/html" id="UserIdTpl">
+    <a data-open="{:url('@mini/user/index')}?id={{d.user_id}}&spm=m-25-33-34" title="{:lang('查看用户')}" style="cursor:pointer;">{{d.user_id}}</a>
+</script>
+
+<script type="text/html" id="SourceTpl">
+    {{- $.scoreSourceLabel(d.source) }}
+</script>
+
+<script type="text/html" id="ChangeTpl">
+    {{# if(d.change > 0){ }}
+    <b class="color-green">+{{d.change}}</b>
+    {{# }else{ }}
+    <b class="color-red">{{d.change}}</b>
+    {{# } }}
+</script>
+
+{/block}

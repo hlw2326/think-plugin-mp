@@ -1,0 +1,112 @@
+{extend name="../../admin/view/table"}
+
+{block name="button"}
+<!--{if auth("add")}-->
+<button data-modal='{:url("add")}' data-title="{:lang('添加广告')}" class='layui-btn layui-btn-sm layui-btn-primary'>{:lang('添加广告')}</button>
+<!--{/if}-->
+<!--{if auth("remove")}-->
+<a data-confirm="{:lang('确定要删除这些广告吗？')}" data-table-id="AdTable" data-action='{:url("remove")}' data-rule="id#{id}" class='layui-btn layui-btn-sm layui-btn-danger'>{:lang('批量删除')}</a>
+<!--{/if}-->
+{/block}
+{block name="content"}
+
+<div class="layui-tab layui-tab-card">
+    <ul class="layui-tab-title notselect">
+    {foreach $tabs as $k => $v}
+    {if (isset($get.appid) && $get.appid eq $k) || (!isset($get.appid) && $k eq '')}
+    <li class="layui-this" data-open="{:url('index')}?appid={$k}">{$v.name}<sup class="layui-badge border-radius">{$v.count}</sup></li>
+    {else}
+    <li data-open="{:url('index')}?appid={$k}">{$v.name}<sup class="layui-badge border-radius">{$v.count}</sup></li>
+    {/if}
+    {/foreach}
+    </ul>
+    <div class="layui-tab-content">
+        {include file='ad/index_search'}
+        <table id="AdTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
+    </div>
+</div>
+<label class="layui-hide">
+    <textarea id="AdTypesData">{:json_encode($ad_types, JSON_UNESCAPED_UNICODE)}</textarea>
+</label>
+<label class="layui-hide">
+    <textarea id="MpListData">{:json_encode($mp_list, JSON_UNESCAPED_UNICODE)}</textarea>
+</label>
+
+<script>
+    $.mpName = (function () {
+        var list = JSON.parse($('#MpListData').text());
+        return function (appid) {
+            return list[appid]
+                ? '<span>' + list[appid] + '</span><span class="color-desc" style="font-size:11px">(' + appid + ')</span>'
+                : appid;
+        };
+    })();
+
+    $.adTypeLabel = (function () {
+        var types = JSON.parse($('#AdTypesData').text());
+        return function (type) {
+            var item = types[type] || {label: type, 'class': 'layui-bg-gray'};
+            return '<span class="layui-badge ' + item['class'] + '">' + item.label + '</span>';
+        };
+    })();
+
+    $(function () {
+        $('#AdTable').layTable({
+            even: true, height: 'full',
+            sort: {field: 'sort', type: 'desc'},
+            cols: [[
+                {checkbox: true, fixed: true},
+                {field: 'id', title: 'ID', width: 70, align: 'center', sort: true},
+                {field: 'sort', title: '{:lang("排序")}', width: 120, align: 'center', templet: '#SortInputTpl'},
+                {field: 'appid', title: '{:lang("所属小程序")}', width: 200, align: 'center', templet: '#MpNameTpl'},
+                {field: 'name', title: '{:lang("广告名称")}', minWidth: 140},
+                {field: 'unit_id', title: '{:lang("广告ID")}', minWidth: 220},
+                {field: 'ad_type', title: '{:lang("广告类型")}', width: 175, align: 'center', templet: '#AdTypeTpl'},
+                {field: 'position', title: '{:lang("位置标识")}', width: 150, align: 'center'},
+                {field: 'status', title: '{:lang("状态")}', width: 110, align: 'center', templet: '#StatusSwitchTpl'},
+                {field: 'create_at', title: '{:lang("创建时间")}', width: 160, align: 'center', sort: true},
+                {toolbar: '#toolbar', title: '{:lang("操作面板")}', width: 300, align: 'left'}
+            ]]
+        });
+
+        layui.form.on('switch(StatusSwitch)', function (obj) {
+            var data = {id: obj.value, status: obj.elem.checked > 0 ? 1 : 0};
+            $.form.load("{:url('state')}", data, 'post', function (ret) {
+                if (ret.code < 1) $.msg.error(ret.info, 3, function () {
+                    $('#AdTable').trigger('reload');
+                }); else $('#AdTable').trigger('reload');
+                return false;
+            }, false);
+        });
+    });
+</script>
+
+<script type="text/html" id="SortInputTpl">
+    <input type="number" min="0" data-blur-number="0" data-action-blur="{:sysuri()}" data-value="id#{{d.id}};action#sort;sort#{value}" data-loading="false" value="{{d.sort}}" class="layui-input text-center">
+</script>
+
+<script type="text/html" id="AdTypeTpl">
+    {{- $.adTypeLabel(d.ad_type) }}
+</script>
+
+<script type="text/html" id="MpNameTpl">
+    {{- $.mpName(d.appid) }}
+</script>
+
+<script type="text/html" id="StatusSwitchTpl">
+    <!--{if auth("state")}-->
+    <input type="checkbox" value="{{d.id}}" lay-skin="switch" lay-text="{:lang('已启用')}|{:lang('已禁用')}" lay-filter="StatusSwitch" {{-d.status>0?'checked':''}}>
+    <!--{else}-->
+    {{-d.status ? '<b class="color-green">{:lang("已启用")}</b>' : '<b class="color-red">{:lang("已禁用")}</b>'}}
+    <!--{/if}-->
+</script>
+
+<script type="text/html" id="toolbar">
+    <!--{if auth("edit")}-->
+    <a class="layui-btn layui-btn-sm" data-title="{:lang('编辑广告')}" data-modal='{:url("edit")}?id={{d.id}}'>{:lang('编 辑')}</a>
+    <!--{/if}-->
+    <!--{if auth("remove")}-->
+    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="{:lang('确定要删除该广告吗？')}" data-action="{:url('remove')}" data-value="id#{{d.id}}">{:lang('删 除')}</a>
+    <!--{/if}-->
+</script>
+{/block}

@@ -1,0 +1,740 @@
+{extend name="../../admin/view/main"} {block name="style"}
+
+<style>
+    :root {
+        --cb: #2563eb;
+        --cbl: #dbeafe;
+        --co: #ea580c;
+        --col: #ffedd5;
+        --cg: #16a34a;
+        --cgl: #dcfce7;
+        --cc: #0891b2;
+        --ccl: #cffafe;
+        --cp: #7c3aed;
+        --cpl: #ede9fe;
+        --cr: #dc2626;
+        --crl: #fee2e2;
+        --cpk: #db2777;
+        --cpkl: #fce7f3;
+        --cam: #d97706;
+        --caml: #fef3c7;
+        --ct: #0d9488;
+        --ctl: #ccfbf1;
+        --ci: #4f46e5;
+        --cil: #e0e7ff;
+    }
+    .kc {
+        background: #fff;
+        border-radius: 10px;
+        padding: 16px 18px;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+    }
+    .kc .ic {
+        width: 40px;
+        height: 40px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+    .kc .vl {
+        font-size: 26px;
+        font-weight: 700;
+        color: #111827;
+        line-height: 1;
+        margin: 10px 0 2px;
+        letter-spacing: -0.5px;
+    }
+    .kc .lb {
+        font-size: 12px;
+        font-weight: 600;
+        color: #374151;
+    }
+    .kc .sb {
+        font-size: 11px;
+        color: #9ca3af;
+        margin-top: 3px;
+    }
+    .kc .deco {
+        position: absolute;
+        right: -12px;
+        bottom: -12px;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        opacity: 0.07;
+    }
+    .kc .ftr {
+        display: flex;
+        border-top: 1px solid #f9fafb;
+        margin-top: 12px;
+        padding-top: 10px;
+    }
+    .kc .fi {
+        flex: 1;
+        text-align: center;
+    }
+    .kc .fi .fv {
+        font-size: 15px;
+        font-weight: 700;
+        color: #1f2937;
+    }
+    .kc .fi .fl {
+        font-size: 10px;
+        color: #9ca3af;
+        margin-top: 2px;
+    }
+    .kc .fi + .fi {
+        border-left: 1px solid #f3f4f6;
+    }
+    .kc-b .ic {
+        background: var(--cbl);
+        color: var(--cb);
+    }
+    .kc-b .deco {
+        background: var(--cb);
+    }
+    .kc-o .ic {
+        background: var(--col);
+        color: var(--co);
+    }
+    .kc-o .deco {
+        background: var(--co);
+    }
+    .kc-g .ic {
+        background: var(--cgl);
+        color: var(--cg);
+    }
+    .kc-g .deco {
+        background: var(--cg);
+    }
+    .kc-c .ic {
+        background: var(--ccl);
+        color: var(--cc);
+    }
+    .kc-c .deco {
+        background: var(--cc);
+    }
+    .kc-p .ic {
+        background: var(--cpl);
+        color: var(--cp);
+    }
+    .kc-p .deco {
+        background: var(--cp);
+    }
+    .kc-r .ic {
+        background: var(--crl);
+        color: var(--cr);
+    }
+    .kc-r .deco {
+        background: var(--cr);
+    }
+    .kc-pk .ic {
+        background: var(--cpkl);
+        color: var(--cpk);
+    }
+    .kc-pk .deco {
+        background: var(--cpk);
+    }
+    .kc-am .ic {
+        background: var(--caml);
+        color: var(--cam);
+    }
+    .kc-am .deco {
+        background: var(--cam);
+    }
+    .kc-t .ic {
+        background: var(--ctl);
+        color: var(--ct);
+    }
+    .kc-t .deco {
+        background: var(--ct);
+    }
+    .kc-i .ic {
+        background: var(--cil);
+        color: var(--ci);
+    }
+    .kc-i .deco {
+        background: var(--ci);
+    }
+    .cc {
+        background: #fff;
+        border-radius: 10px;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+    .cc .ch {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 16px 0;
+    }
+    .cc .ct {
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+    .cc .ct em {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        font-style: normal;
+    }
+    .cc .cb {
+        padding: 6px 14px 14px;
+    }
+    .ms {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 7px 0;
+    }
+    .ms .ml {
+        font-size: 11px;
+        color: #6b7280;
+        width: 32px;
+        flex-shrink: 0;
+    }
+    .ms .mw {
+        flex: 1;
+        background: #f3f4f6;
+        border-radius: 3px;
+        height: 5px;
+        overflow: hidden;
+    }
+    .ms .mb {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 0;
+    }
+    .ms .mv {
+        font-size: 11px;
+        font-weight: 600;
+        color: #374151;
+        min-width: 30px;
+        text-align: right;
+    }
+    @keyframes fu {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .kc,
+    .cc {
+        animation: fu 0.35s ease both;
+    }
+    .l0 {
+        animation-delay: 0.04s;
+    }
+    .l1 {
+        animation-delay: 0.08s;
+    }
+    .l2 {
+        animation-delay: 0.12s;
+    }
+    .l3 {
+        animation-delay: 0.16s;
+    }
+    .l4 {
+        animation-delay: 0.2s;
+    }
+    .l5 {
+        animation-delay: 0.24s;
+    }
+    .l6 {
+        animation-delay: 0.28s;
+    }
+    .l7 {
+        animation-delay: 0.32s;
+    }
+    .l8 {
+        animation-delay: 0.36s;
+    }
+    .l9 {
+        animation-delay: 0.4s;
+    }
+    .l10 {
+        animation-delay: 0.44s;
+    }
+    .l11 {
+        animation-delay: 0.48s;
+    }
+    .l12 {
+        animation-delay: 0.52s;
+    }
+    .l13 {
+        animation-delay: 0.56s;
+    }
+</style>
+{/block} {block name="content"}
+<div class="layui-row layui-col-space10">
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md3 l0">
+        <div class="kc kc-b">
+            <div class="deco"></div>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between">
+                <div>
+                    <div class="lb">用户总数</div>
+                    <div class="vl kn">{$totalUsers|default=0}</div>
+                    <div class="sb">全部注册用户</div>
+                </div>
+                <div class="ic"><i class="layui-icon layui-icon-group"></i></div>
+            </div>
+            <div class="ftr">
+                <div class="fi">
+                    <div class="fv kn">{$newUsersToday|default=0}</div>
+                    <div class="fl">今日新增</div>
+                </div>
+                <div class="fi">
+                    <div class="fv kn">{$newUsersMonth|default=0}</div>
+                    <div class="fl">本月新增</div>
+                </div>
+                <div class="fi">
+                    <div class="fv kn">{$usersWithPhone|default=0}</div>
+                    <div class="fl">绑定手机</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md3 l1">
+        <div class="kc kc-o">
+            <div class="deco"></div>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between">
+                <div>
+                    <div class="lb">VIP 会员</div>
+                    <div class="vl kn">{$vipUsers|default=0}</div>
+                    <div class="sb">当前有效会员</div>
+                </div>
+                <div class="ic"><i class="layui-icon layui-icon-diamond"></i></div>
+            </div>
+            <div class="ftr">
+                <div class="fi">
+                    <div class="fv kn">{$vipExpireSoon|default=0}</div>
+                    <div class="fl">7天内到期</div>
+                </div>
+                <div class="fi">
+                    <div class="fv kn">{$vipExpired|default=0}</div>
+                    <div class="fl">已过期</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md3 l2">
+        <div class="kc kc-pk">
+            <div class="deco"></div>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between">
+                <div>
+                    <div class="lb">今日活跃</div>
+                    <div class="vl kn">{$activeUsersToday|default=0}</div>
+                    <div class="sb">今日登录用户</div>
+                </div>
+                <div class="ic"><i class="layui-icon layui-icon-login-wechat"></i></div>
+            </div>
+            <div class="ftr">
+                <div class="fi">
+                    <div class="fv kn">{$activeUsersMonth|default=0}</div>
+                    <div class="fl">本月活跃</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md3 l3">
+        <div class="kc kc-p">
+            <div class="deco"></div>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between">
+                <div>
+                    <div class="lb">用户积分</div>
+                    <div class="vl kn">{$totalScore|default=0}</div>
+                    <div class="sb">积分总量</div>
+                </div>
+                <div class="ic"><i class="layui-icon layui-icon-rate"></i></div>
+            </div>
+            <div class="ftr">
+                <div class="fi">
+                    <div class="fv">{$avgScore|default=0}</div>
+                    <div class="fl">人均积分</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layui-row layui-col-space10" style="margin-top:10px">
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md3 l4">
+        <div class="kc kc-p">
+            <div class="deco"></div>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between">
+                <div>
+                    <div class="lb">小程序</div>
+                    <div class="vl kn">{$totalApps|default=0}</div>
+                    <div class="sb">已接入小程序</div>
+                </div>
+                <div class="ic"><i class="layui-icon layui-icon-app"></i></div>
+            </div>
+            <div class="ftr">
+                <div class="fi">
+                    <div class="fv kn">{$activeApps|default=0}</div>
+                    <div class="fl">启用</div>
+                </div>
+                <div class="fi">
+                    <div class="fv kn">{$inactiveApps|default=0}</div>
+                    <div class="fl">停用</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md3 l5">
+        <div class="kc kc-r">
+            <div class="deco"></div>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between">
+                <div>
+                    <div class="lb">广告位</div>
+                    <div class="vl kn">{$totalAds|default=0}</div>
+                    <div class="sb">广告位总数</div>
+                </div>
+                <div class="ic"><i class="layui-icon layui-icon-template-1"></i></div>
+            </div>
+            <div class="ftr">
+                <div class="fi">
+                    <div class="fv kn">{$activeAds|default=0}</div>
+                    <div class="fl">启用</div>
+                </div>
+                <div class="fi">
+                    <div class="fv kn">{$inactiveAds|default=0}</div>
+                    <div class="fl">停用</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md3 l6">
+        <div class="kc kc-c">
+            <div class="deco"></div>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between">
+                <div>
+                    <div class="lb">通知公告</div>
+                    <div class="vl kn">{$totalNotices|default=0}</div>
+                    <div class="sb">通知总数</div>
+                </div>
+                <div class="ic"><i class="layui-icon layui-icon-notice"></i></div>
+            </div>
+            <div class="ftr">
+                <div class="fi">
+                    <div class="fv kn">{$publishedNotices|default=0}</div>
+                    <div class="fl">已发布</div>
+                </div>
+                <div class="fi">
+                    <div class="fv kn">{$draftNotices|default=0}</div>
+                    <div class="fl">草稿</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md3 l7">
+        <div class="kc kc-t">
+            <div class="deco"></div>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between">
+                <div>
+                    <div class="lb">今日查询</div>
+                    <div class="vl kn">{$todayQueries|default=0}</div>
+                    <div class="sb">今日查询次数</div>
+                </div>
+                <div class="ic"><i class="layui-icon layui-icon-search"></i></div>
+            </div>
+            <div class="ftr">
+                <div class="fi">
+                    <div class="fv kn">{$monthQueries|default=0}</div>
+                    <div class="fl">本月查询</div>
+                </div>
+                <div class="fi">
+                    <div class="fv kn">{$totalQueries|default=0}</div>
+                    <div class="fl">累计</div>
+                </div>
+                <div class="fi">
+                    <div class="fv kn">{$refundedQueries|default=0}</div>
+                    <div class="fl">已退积分</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layui-row layui-col-space10" style="margin-top:10px">
+    <div class="layui-col-xs12 layui-col-md6 l8">
+        <div class="kc kc-am" style="padding-bottom: 14px">
+            <div class="deco"></div>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px">
+                <div>
+                    <div class="vl kn">{$totalScoreCards|default=0}</div>
+                </div>
+                <div class="ic"><i class="layui-icon layui-icon-diamond"></i></div>
+            </div>
+            <div class="ms">
+                <span class="ml">可用</span>
+                <div class="mw"><div class="mb" style="background: #f59e0b" data-max="{$totalScoreCards|default=1}" data-v="{$activeScoreCards|default=0}"></div></div>
+                <span class="mv kn">{$activeScoreCards|default=0}</span>
+            </div>
+            <div class="ms">
+                <span class="ml">已用</span>
+                <div class="mw"><div class="mb" style="background: #60a5fa" data-max="{$totalScoreCards|default=1}" data-v="{$usedScoreCards|default=0}"></div></div>
+                <span class="mv kn">{$usedScoreCards|default=0}</span>
+            </div>
+            <div class="ms">
+                <span class="ml">禁用</span>
+                <div class="mw"><div class="mb" style="background: #f87171" data-max="{$totalScoreCards|default=1}" data-v="{$voidScoreCards|default=0}"></div></div>
+                <span class="mv kn">{$voidScoreCards|default=0}</span>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-md6 l9">
+        <div class="kc kc-i" style="padding-bottom: 14px">
+            <div class="deco"></div>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px">
+                <div>
+                    <div class="vl kn">{$totalVipCards|default=0}</div>
+                </div>
+                <div class="ic"><i class="layui-icon layui-icon-diamond"></i></div>
+            </div>
+            <div class="ms">
+                <span class="ml">可用</span>
+                <div class="mw"><div class="mb" style="background: #6366f1" data-max="{$totalVipCards|default=1}" data-v="{$activeVipCards|default=0}"></div></div>
+                <span class="mv kn">{$activeVipCards|default=0}</span>
+            </div>
+            <div class="ms">
+                <span class="ml">已用</span>
+                <div class="mw"><div class="mb" style="background: #60a5fa" data-max="{$totalVipCards|default=1}" data-v="{$usedVipCards|default=0}"></div></div>
+                <span class="mv kn">{$usedVipCards|default=0}</span>
+            </div>
+            <div class="ms">
+                <span class="ml">禁用</span>
+                <div class="mw"><div class="mb" style="background: #f87171" data-max="{$totalVipCards|default=1}" data-v="{$voidVipCards|default=0}"></div></div>
+                <span class="mv kn">{$voidVipCards|default=0}</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layui-row layui-col-space10" style="margin-top:10px">
+    <div class="layui-col-xs12 layui-col-md8 l10">
+        <div class="cc">
+            <div class="ch">
+                <div class="ct"><em style="background: #3b82f6"></em>注册趋势（近30天）</div>
+            </div>
+            <div class="cb"><div id="chartTrend" style="width: 100%; height: 240px"></div></div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-md4 l11">
+        <div class="cc">
+            <div class="ch">
+                <div class="ct"><em style="background: #f472b6"></em>用户性别分布</div>
+            </div>
+            <div class="cb"><div id="chartGender" style="width: 100%; height: 240px"></div></div>
+        </div>
+    </div>
+</div>
+<div class="layui-row layui-col-space12" style="margin-top: 12px">
+    <div class="layui-col-xs12 layui-col-md8 l12">
+        <div class="cc">
+            <div class="ch">
+                <div class="ct"><em style="background: #60a5fa"></em>用户增长趋势（近12个月）</div>
+            </div>
+            <div class="cb"><div id="chartMonthly" style="width: 100%; height: 220px"></div></div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-md4 l13">
+        <div class="cc">
+            <div class="ch">
+                <div class="ct"><em style="background: #34d399"></em>查询平台分布</div>
+            </div>
+            <div class="cb"><div id="chartPlatform" style="width: 100%; height: 220px"></div></div>
+        </div>
+    </div>
+</div>
+<label class="layui-hide">
+    <textarea id="DatTrend">{$trendData|raw}</textarea>
+    <textarea id="DatMonthly">{$monthlyTrendData|raw}</textarea>
+    <textarea id="DatGender">{$genderData|raw}</textarea>
+    <textarea id="DatPlatform">{$queryPlatformData|raw}</textarea>
+    <textarea id="DatAdType">{$adTypeData|raw}</textarea>
+    <textarea id="DatNotice">{$noticeTypeData|raw}</textarea>
+</label>
+{/block} {block name="script"}
+<script>
+    $(function () {
+        // 数字计数动画
+        document.querySelectorAll(".kn").forEach(function (el, i) {
+            var raw = el.textContent.trim(),
+                val = parseFloat(raw.replace(/,/g, ""));
+            if (isNaN(val)) return;
+            if (val === 0) {
+                el.style.color = "#9ca3af";
+                return;
+            }
+            el.textContent = "0";
+            setTimeout(
+                function () {
+                    var start = null,
+                        dur = 1100,
+                        isF = raw.indexOf(".") !== -1;
+                    function step(ts) {
+                        if (!start) start = ts;
+                        var p = Math.min((ts - start) / dur, 1),
+                            e = 1 - Math.pow(1 - p, 3);
+                        el.textContent = isF ? (val * e).toFixed(1) : Math.floor(val * e);
+                        if (p < 1) requestAnimationFrame(step);
+                        else el.textContent = raw;
+                    }
+                    requestAnimationFrame(step);
+                },
+                60 + i * 30,
+            );
+        });
+
+        // 进度条动画
+        setTimeout(function () {
+            document.querySelectorAll(".mb").forEach(function (el) {
+                var max = parseFloat(el.dataset.max) || 1,
+                    v = parseFloat(el.dataset.v) || 0;
+                el.style.width = Math.min((v / max) * 100, 100) + "%";
+            });
+        }, 200);
+
+        // ECharts
+        require(["echarts"], function (ec) {
+            var COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899", "#06b6d4", "#f97316"];
+            function axisBase() {
+                return { axisLine: { lineStyle: { color: "#e5e7eb" } }, axisLabel: { color: "#9ca3af", fontSize: 11 }, axisTick: { show: false }, splitLine: { lineStyle: { color: "#f3f4f6" } } };
+            }
+            function tip() {
+                return { backgroundColor: "#fff", borderColor: "#e5e7eb", borderWidth: 1, textStyle: { color: "#374151", fontSize: 12 } };
+            }
+            function pieOpt(name, data) {
+                return {
+                    tooltip: Object.assign({ trigger: "item", formatter: "{b}: {c} ({d}%)" }, tip()),
+                    legend: { orient: "horizontal", bottom: 2, left: "center", textStyle: { color: "#6b7280", fontSize: 11 }, itemWidth: 8, itemHeight: 8, itemGap: 8 },
+                    series: [
+                        {
+                            name: name,
+                            type: "pie",
+                            radius: ["36%", "62%"],
+                            center: ["50%", "44%"],
+                            itemStyle: { borderRadius: 3, borderColor: "#fff", borderWidth: 2 },
+                            label: { show: false },
+                            emphasis: { label: { show: true, fontSize: 12, fontWeight: "600" } },
+                            data: data.map(function (d, i) {
+                                return { name: d.name, value: d.value, itemStyle: { color: COLORS[i % COLORS.length] } };
+                            }),
+                        },
+                    ],
+                };
+            }
+
+            // 趋势折线
+            var td = JSON.parse($("#DatTrend").text());
+            var c1 = ec.init(document.getElementById("chartTrend"));
+            c1.setOption({
+                tooltip: Object.assign({ trigger: "axis", axisPointer: { type: "line", lineStyle: { color: "#e5e7eb", type: "dashed" } } }, tip()),
+                grid: { left: 30, right: 16, top: 14, bottom: 24, containLabel: true },
+                xAxis: Object.assign(
+                    {
+                        type: "category",
+                        boundaryGap: false,
+                        data: td.dates.map(function (d) {
+                            return d.substring(5);
+                        }),
+                    },
+                    axisBase(),
+                ),
+                yAxis: Object.assign({ type: "value", minInterval: 1 }, axisBase()),
+                series: [
+                    {
+                        name: "新增用户",
+                        type: "line",
+                        smooth: true,
+                        symbol: "circle",
+                        symbolSize: 4,
+                        data: td.counts,
+                        lineStyle: { width: 2, color: "#3b82f6" },
+                        itemStyle: { color: "#3b82f6", borderColor: "#fff", borderWidth: 2 },
+                        areaStyle: {
+                            color: {
+                                type: "linear",
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [
+                                    { offset: 0, color: "rgba(59,130,246,.15)" },
+                                    { offset: 1, color: "rgba(59,130,246,.01)" },
+                                ],
+                            },
+                        },
+                    },
+                ],
+            });
+
+            // 性别饼
+            var gc = ec.init(document.getElementById("chartGender"));
+            var gd = JSON.parse($("#DatGender").text());
+            gc.setOption(pieOpt("性别", gd));
+
+            // 12月柱状
+            var md = JSON.parse($("#DatMonthly").text());
+            var c2 = ec.init(document.getElementById("chartMonthly"));
+            c2.setOption({
+                tooltip: Object.assign({ trigger: "axis" }, tip()),
+                grid: { left: 30, right: 16, top: 14, bottom: 24, containLabel: true },
+                xAxis: Object.assign({ type: "category", data: md.months }, axisBase()),
+                yAxis: Object.assign({ type: "value", minInterval: 1 }, axisBase()),
+                series: [
+                    {
+                        name: "新增用户",
+                        type: "bar",
+                        barWidth: "55%",
+                        data: md.counts,
+                        itemStyle: {
+                            color: {
+                                type: "linear",
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [
+                                    { offset: 0, color: "#60a5fa" },
+                                    { offset: 1, color: "#bfdbfe" },
+                                ],
+                            },
+                            borderRadius: [3, 3, 0, 0],
+                        },
+                    },
+                ],
+            });
+
+            // 查询平台饼
+            var pc = ec.init(document.getElementById("chartPlatform"));
+            var pd = JSON.parse($("#DatPlatform").text());
+            pc.setOption(pieOpt("平台", pd));
+
+            // resize
+            var charts = [c1, gc, c2, pc];
+            window.addEventListener("resize", function () {
+                charts.forEach(function (c) {
+                    c.resize();
+                });
+            });
+        });
+    });
+</script>
+{/block}{/block}

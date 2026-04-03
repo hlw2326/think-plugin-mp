@@ -1,0 +1,85 @@
+<form class="layui-form layui-form-pane form-search" action="{:sysuri()}" onsubmit="return false" method="get" autocomplete="off">
+    <input type="hidden" name="id" value="{$get.id|default=''}">
+    <fieldset>
+        <legend>{:lang('条件搜索')}</legend>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('昵称')}</label>
+            <div class="layui-input-inline">
+                <input name="nickname" value="{$get.nickname|default=''}" placeholder="{:lang('请输入昵称')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('手机号')}</label>
+            <div class="layui-input-inline">
+                <input name="phone" value="{$get.phone|default=''}" placeholder="{:lang('请输入手机号')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">OpenID</label>
+            <div class="layui-input-inline">
+                <input name="openid" value="{$get.openid|default=''}" placeholder="{:lang('请输入OpenID')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('状态')}</label>
+            <div class="layui-input-inline">
+                <select name="status" class="layui-select" lay-append-to>
+                    <option value="">-- {:lang('全部')} --</option>
+                    <option value="1" {if isset($get.status) && $get.status == '1'}selected{/if}>{:lang('正常')}</option>
+                    <option value="0" {if isset($get.status) && $get.status == '0'}selected{/if}>{:lang('禁用')}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('注册时间')}</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="create_at" value="{$get.create_at|default=''}" placeholder="{:lang('请选择注册时间')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('上级用户')}</label>
+            <div class="layui-input-inline">
+                <input name="pid" value="{$get.pid|default=''}" placeholder="{:lang('上级用户ID')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('手机型号')}</label>
+            <div class="layui-input-inline">
+                <input name="model" value="{$get.model|default=''}" placeholder="{:lang('模糊搜索型号')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('SDK版本')}</label>
+            <div class="layui-input-inline">
+                <input name="sdk" value="{$get.sdk|default=''}" placeholder="{:lang('模糊搜索版本')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('小程序版本')}</label>
+            <div class="layui-input-inline">
+                <input name="ver" value="{$get.ver|default=''}" placeholder="{:lang('模糊搜索版本')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('渠道来源')}</label>
+            <div class="layui-input-inline">
+                <input name="channel" value="{$get.channel|default=''}" placeholder="{:lang('模糊搜索渠道')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon layui-icon-search"></i> {:lang('搜 索')}</button>
+        </div>
+
+    </fieldset>
+</form>

@@ -1,0 +1,48 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="UserQueryTable">
+    <div class="layui-card-body padding-left-40">
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('退积分确认')}</b></legend>
+            <div class="layui-row layui-col-space15">
+
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('用户ID')}</b>UserID</span>
+                        <input value="{$vo.user_id|default=''}" class="layui-input" disabled>
+                    </label>
+                </div>
+
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('退还积分')}</b>Score</span>
+                        <input value="{$vo.cost_score|default=''}" class="layui-input" disabled>
+                    </label>
+                </div>
+
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('查询链接')}</b>URL</span>
+                        <input value="{$vo.input_url|default=''}" class="layui-input" disabled>
+                    </label>
+                </div>
+
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('退分备注')}</b>Remark</span>
+                        <input name="remark" value="" placeholder="{:lang('请输入退分原因（选填）')}" class="layui-input">
+                    </label>
+                </div>
+
+            </div>
+        </fieldset>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <input type="hidden" name="id" value="{$vo.id|default=''}">
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn layui-btn-warm" type="submit">{:lang('确认退积分')}</button>
+        <button class="layui-btn layui-btn-danger" type="button" data-close>{:lang('取消')}</button>
+    </div>
+</form>

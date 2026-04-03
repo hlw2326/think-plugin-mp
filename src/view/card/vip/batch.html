@@ -1,0 +1,80 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="CardVipTable">
+    <div class="layui-card-body padding-left-40">
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('批量生成设置')}</b></legend>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('批次号')}</b>Batch No</span>
+                        <input name="batch_no" value='{$vo.batch_no|default=""}' required vali-name="{:lang('批次号')}" placeholder="{:lang('请输入批次号，用于归类管理')}" class="layui-input">
+                        <span class="help-block color-desc">{:lang('批次号用于归类管理同批次卡密')}</span>
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('生成数量')}</b>Count</span>
+                        <input type="number" min="1" max="1000" name="count" value='{$vo.count|default="10"}' required vali-name="{:lang('生成数量')}" placeholder="10" class="layui-input">
+                        <span class="help-block color-desc">{:lang('最多一次生成1000张')}</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('会员天数')}</b>VIP Days</span>
+                        <input type="number" min="1" name="vip_days" value='{$vo.vip_days|default=""}' required vali-name="{:lang('会员天数')}" placeholder="{:lang('请输入每张卡密的会员天数')}" class="layui-input">
+                        <span class="help-block color-desc">{:lang('兑换后延长的会员天数')}</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs4">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('最大用户数')}</b>Max Users</span>
+                        <input type="number" min="0" name="max_users" value='{$vo.max_users|default="1"}' vali-name="{:lang('最大用户数')}" placeholder="0" class="layui-input">
+                        <span class="help-block color-desc">{:lang('0表示无限制')}</span>
+                    </label>
+                </div>
+                <div class="layui-col-xs4">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('用户使用次数')}</b>User Limit</span>
+                        <input type="number" min="1" name="user_limit" value='{$vo.user_limit|default="1"}' required vali-name="{:lang('用户使用次数')}" placeholder="1" class="layui-input">
+                        <span class="help-block color-desc">{:lang('每个用户可使用次数')}</span>
+                    </label>
+                </div>
+                <div class="layui-col-xs4">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('卡密到期时间')}</b>Expire At</span>
+                        <input data-date-input name="expire_time" value='{$vo.expire_time|default=""}' placeholder="{:lang('留空永不过期')}" class="layui-input">
+                        <span class="help-block color-desc">{:lang('卡密本身过期时间，留空永不过期')}</span>
+                    </label>
+                </div>
+            </div>
+
+        </fieldset>
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('其他设置')}</b></legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('备注')}</b>Remark</span>
+                        <input name="remark" value='{$vo.remark|default=""}' placeholder="{:lang('请输入备注信息（选填）')}" class="layui-input">
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>{:lang('批量生成')}</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="{:lang('确定要取消吗？')}" data-close>{:lang('取消')}</button>
+    </div>
+</form>

@@ -1,0 +1,160 @@
+{extend name="../../admin/view/table"}
+
+{block name="button"}
+<!--{if auth("add")}-->
+<button data-modal='{:url("add")}' data-title="{:lang('添加卡密')}" class='layui-btn layui-btn-sm layui-btn-primary'>{:lang('添加卡密')}</button>
+<!--{/if}-->
+<!--{if auth("batch")}-->
+<button data-modal='{:url("batch")}' data-title="{:lang('批量生成卡密')}" class='layui-btn layui-btn-sm layui-btn-warm'>{:lang('批量生成')}</button>
+<!--{/if}-->
+<!--{if auth("remove")}-->
+<a data-confirm="{:lang('确定要删除这些卡密吗？')}" data-table-id="CardVipTable" data-action='{:url("remove")}' data-rule="id#{id}" class='layui-btn layui-btn-sm layui-btn-danger'>{:lang('批量删除')}</a>
+<!--{/if}-->
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='card/vip/index_search'}
+    <table id="CardVipTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
+</div>
+
+<script>
+    var langUnlimited = '{:lang("无限制")}';
+    var langNeverExpire = '{:lang("永不过期")}';
+    $(function () {
+        $('#CardVipTable').layTable({
+            even: true, height: 'full',
+            sort: {field: 'id', type: 'desc'},
+            cols: [[
+                {checkbox: true, fixed: true},
+                {field: 'id', title: 'ID', width: 70, align: 'center', sort: true},
+                {field: 'batch_no', title: '{:lang("批次号")}', width: 200, align: 'center', templet: '#BatchNoTpl'},
+                {field: 'card_code', title: '{:lang("卡密码")}', minWidth: 180, align: 'center', templet: '#CardCodeTpl'},
+                {field: 'days', title: '{:lang("会员天数")}', width: 120, align: 'center', sort: true, templet: '#VipDaysTpl'},
+                {field: 'max_users', title: '{:lang("最大用户数")}', width: 120, align: 'center', templet: '#MaxUsersTpl'},
+                {field: 'used_count', title: '{:lang("是否使用")}', width: 120, align: 'center', templet: '#IsUsedTpl'},
+                {field: 'used_count', title: '{:lang("剩余次数")}', width: 120, align: 'center', templet: '#RemainTpl'},
+                {field: 'user_limit', title: '{:lang("用户限制")}', width: 120, align: 'center', templet: '#UserLimitTpl'},
+                {field: 'expire_time', title: '{:lang("卡密到期")}', width: 160, align: 'center', templet: '#ExpireTimeTpl'},
+                {field: 'status', title: '{:lang("启用状态")}', width: 120, align: 'center', templet: '#StatusSwitchTpl'},
+                {field: 'create_at', title: '{:lang("创建时间")}', width: 160, align: 'center', sort: true},
+                {toolbar: '#toolbar', title: '{:lang("操作面板")}', align: 'left', width: 300}
+            ]]
+        });
+
+        layui.form.on('switch(StatusSwitch)', function (obj) {
+            var data = {id: obj.value, status: obj.elem.checked > 0 ? 1 : 0};
+            $.form.load("{:url('state')}", data, 'post', function (ret) {
+                if (ret.code < 1) $.msg.error(ret.info, 3, function () {
+                    $('#CardVipTable').trigger('reload');
+                }); else {
+                    $('#CardVipTable').trigger('reload');
+                }
+                return false;
+            }, false);
+        });
+    });
+
+    require(['excel'], function (excel) {
+        excel.bind(function (data) {
+            data.forEach(function (item, index) {
+                data[index] = [
+                    item.id,
+                    item.batch_no,
+                    item.card_code,
+                    item.days,
+                    item.max_users > 0 ? item.max_users : '{:lang("无限制")}',
+                    item.user_limit,
+                    item.expire_time > 0 ? layui.util.toDateString(item.expire_time * 1000, 'yyyy-MM-dd') : '{:lang("永不过期")}',
+                    item.status == 1 ? '{:lang("已激活")}' : '{:lang("已禁用")}',
+                    item.create_at
+                ];
+            });
+            data.unshift([
+                'ID', '{:lang("批次号")}', '{:lang("卡密码")}', '{:lang("会员天数")}',
+                '{:lang("最大用户数")}', '{:lang("用户限制")}', '{:lang("卡密到期")}',
+                '{:lang("状态")}', '{:lang("创建时间")}'
+            ]);
+            return this.withStyle(data, {
+                A: 60, B: 180, C: 180, D: 100,
+                E: 100, F: 100, G: 120, H: 80, I: 170
+            });
+        }, '{:lang("会员卡密")}' + '_' + layui.util.toDateString(Date.now(), 'yyyyMMdd_HHmmss'));
+    });
+</script>
+
+
+<script type="text/html" id="StatusSwitchTpl">
+    <!--{if auth("state")}-->
+    <input type="checkbox" value="{{d.id}}" lay-skin="switch" lay-text="{:lang('已激活')}|{:lang('已禁用')}" lay-filter="StatusSwitch" {{-d.status>0?'checked':''}}>
+    <!--{else}-->
+    {{-d.status ? '<b class="color-green">{:lang("已激活")}</b>' : '<b class="color-red">{:lang("已禁用")}</b>'}}
+    <!--{/if}-->
+</script>
+
+<script type="text/html" id="BatchNoTpl">
+    <div>{{d.batch_no||"-"}}</div>
+</script>
+
+<script type="text/html" id="CardCodeTpl">
+    <div><i class="layui-icon layui-icon-list" data-copy="{{d.card_code}}" title="{:lang('复制')}" style="margin-right:4px"></i><code>{{d.card_code}}</code></div>
+</script>
+
+<script type="text/html" id="VipDaysTpl">
+    <div>{{d.days}}{:lang('天')}</div>
+</script>
+
+<script type="text/html" id="MaxUsersTpl">
+    <div>{{d.max_users > 0 ? d.max_users : langUnlimited}}</div>
+</script>
+
+<script type="text/html" id="UserLimitTpl">
+    <div>{{d.user_limit}}{:lang('次')}</div>
+</script>
+
+<script type="text/html" id="IsUsedTpl">
+    {{# if(d.used_count > 0){ }}
+    <b class="color-green">{:lang('已使用')}</b>
+    {{# }else{ }}
+    <span class="color-gray">{:lang('未使用')}</span>
+    {{# } }}
+</script>
+
+<script type="text/html" id="RemainTpl">
+    {{# if(d.max_users > 0){ }}
+    {{# var remain = d.max_users - d.used_count; }}
+    {{# if(remain <= 0){ }}
+    <span class="color-red">0</span>
+    {{# }else{ }}
+    <span class="color-green">{{remain}}</span>
+    {{# } }}
+    {{# }else{ }}
+    <span>{{langUnlimited}}</span>
+    {{# } }}
+</script>
+
+<script type="text/html" id="ExpireTimeTpl">
+    {{# if(d.expire_time > 0){ }}
+    {{# if(d.expire_time * 1000 < Date.now()){ }}
+    <span class="color-red">{{layui.util.toDateString(d.expire_time * 1000, 'yyyy-MM-dd')}}</span>
+    {{# }else{ }}
+    <span class="color-green">{{layui.util.toDateString(d.expire_time * 1000, 'yyyy-MM-dd')}}</span>
+    {{# } }}
+    {{# }else{ }}
+    {{- '<b class="color-green">' + langNeverExpire + '</b>'}}
+    {{# } }}
+</script>
+
+<script type="text/html" id="toolbar">
+    <!--{if auth("apply")}-->
+    <a class="layui-btn layui-btn-sm layui-btn-warm" data-title="{:lang('使用卡密')}" data-modal='{:url("apply")}?id={{d.id}}'>{:lang('使 用')}</a>
+    <!--{/if}-->
+    <!--{if auth("edit")}-->
+    <a class="layui-btn layui-btn-sm" data-title="{:lang('编辑卡密')}" data-modal='{:url("edit")}?id={{d.id}}'>{:lang('编 辑')}</a>
+    <!--{/if}-->
+    <!--{if auth("remove")}-->
+    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="{:lang('确定要删除该卡密吗？')}" data-action="{:url('remove')}" data-value="id#{{d.id}}">{:lang('删 除')}</a>
+    <!--{/if}-->
+</script>
+
+{/block}

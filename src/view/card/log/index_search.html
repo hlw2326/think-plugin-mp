@@ -1,0 +1,42 @@
+<form class="layui-form layui-form-pane form-search" action="{:sysuri()}" onsubmit="return false" method="get" autocomplete="off">
+    <fieldset>
+        <legend>{:lang('条件搜索')}</legend>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('卡密码')}</label>
+            <div class="layui-input-inline">
+                <input name="card_code" value="{$get.card_code|default=''}" placeholder="{:lang('请输入卡密码')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('用户ID')}</label>
+            <div class="layui-input-inline">
+                <input name="user_id" value="{$get.user_id|default=''}" placeholder="{:lang('请输入用户ID')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('卡密类型')}</label>
+            <div class="layui-input-inline">
+                <select name="card_type" class="layui-select" lay-append-to>
+                    <option value="">-- {:lang('全部')} --</option>
+                    <option value="1" {if isset($get.card_type) && $get.card_type == '1'}selected{/if}>{:lang('积分卡密')}</option>
+                    <option value="2" {if isset($get.card_type) && $get.card_type == '2'}selected{/if}>{:lang('会员卡密')}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('使用时间')}</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="use_time" value="{$get.use_time|default=''}" placeholder="{:lang('请选择使用时间')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon layui-icon-search"></i> {:lang('搜 索')}</button>
+        </div>
+
+    </fieldset>
+</form>

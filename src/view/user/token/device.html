@@ -1,0 +1,137 @@
+<div class="layui-card-body">
+    <table id="UserTokenTable"
+        data-url="{:sysuri('device')}{notempty name='get.user_id'}?user_id={$get.user_id}{/notempty}"></table>
+
+    <div style="margin-top: 10px;">
+        <!--{if auth("destroy")}-->
+        <a id="btn-destroy" class="layui-btn layui-btn-sm layui-btn-danger" style="margin-left:0;">{:lang('清空所有')}</a>
+        <!--{/if}-->
+        <!--{if auth("clean")}-->
+        <a id="btn-clean" class="layui-btn layui-btn-sm layui-btn-warm" style="margin-left:5px;">{:lang('退出所有设备')}</a>
+        <!--{/if}-->
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#UserTokenTable').layTable({
+            even: true,
+            sort: { field: 'id', type: 'desc' },
+            cols: [[
+                { field: 'id', title: 'ID', width: 80, align: 'center', sort: true },
+                { field: 'device_model', title: '{:lang("设备")}', minWidth: 140, align: 'center', templet: '#DeviceInfoTpl' },
+                { field: 'sdk_version', title: 'SDK', minWidth: 100, align: 'center' },
+                { field: 'app_version', title: '{:lang("版本")}', minWidth: 100, align: 'center' },
+                { field: 'app_channel', title: '{:lang("渠道")}', minWidth: 100, align: 'center' },
+                { field: 'client_ip', title: 'IP', minWidth: 120, align: 'center' },
+                { field: 'login_at', title: '{:lang("登录时间")}', minWidth: 140, align: 'center', sort: true, templet: '#DeviceLoginTimeTpl' },
+                { field: 'status', title: '{:lang("状态")}', width: 100, align: 'center', templet: '#DeviceStatusSwitchTpl' },
+                { toolbar: '#DeviceToolbar', title: '{:lang("操作")}', width: 180, align: 'center', fixed: 'right' }
+            ]]
+        });
+
+        // 退出全部设备
+        $('#btn-clean').on('click', function () {
+            var userId = '{$get.user_id|default=""}';
+            if (!userId) {
+                $.msg.error('用户ID不能为空', 3);
+                return;
+            }
+            layer.confirm('确定要退出该用户所有设备吗？', function (idx) {
+                layer.close(idx);
+                $.form.load("{:url('@mini/user.token/clean')}", { user_id: userId }, 'post', function (ret) {
+                    if (ret.code < 1) {
+                        $.msg.error(ret.info, 3);
+                    } else {
+                        $.msg.success(ret.info, 1);
+                        $('#UserTokenTable').trigger('reload');
+                    }
+                    return false;
+                }, false);
+            });
+        });
+
+        // 清空所有设备（真删除）
+        $('#btn-destroy').on('click', function () {
+            var userId = '{$get.user_id|default=""}';
+            if (!userId) {
+                $.msg.error('用户ID不能为空', 3);
+                return;
+            }
+            layer.confirm('确定要清空该用户所有登录设备吗？此操作不可恢复！', function (idx) {
+                layer.close(idx);
+                $.form.load("{:url('@mini/user.token/destroy')}", { user_id: userId }, 'post', function (ret) {
+                    if (ret.code < 1) {
+                        $.msg.error(ret.info, 3);
+                    } else {
+                        $.msg.success(ret.info, 1);
+                        $('#UserTokenTable').trigger('reload');
+                    }
+                    return false;
+                }, false);
+            });
+        });
+
+        // 退出按钮：手动处理刷新
+        $('#UserTokenTable').on('click', '[data-action]', function () {
+            var $btn = $(this), url = $btn.attr('data-action'), value = $btn.attr('data-value');
+            if (!url) return;
+            var data = {};
+            if (value) value.split(';').forEach(function (pair) {
+                var kv = pair.split('#');
+                if (kv[0]) data[kv[0]] = kv[1] || '';
+            });
+            $.form.load(url, data, 'post', function (ret) {
+                if (ret.code < 1) {
+                    $.msg.error(ret.info, 3);
+                } else {
+                    $.msg.success(ret.info, 1);
+                    $('#UserTokenTable').trigger('reload');
+                }
+                return false;
+            }, false);
+        });
+
+        layui.form.on('switch(DeviceStatusSwitch)', function (obj) {
+            var data = { token: obj.value, status: obj.elem.checked > 0 ? 1 : 0 };
+            $.form.load("{:url('@mini/user.token/remove')}", data, 'post', function (ret) {
+                if (ret.code < 1) $.msg.error(ret.info, 3, function () {
+                    $('#UserTokenTable').trigger('reload');
+                }); else $('#UserTokenTable').trigger('reload');
+                return false;
+            }, false);
+        });
+    });
+</script>
+
+<script type="text/html" id="DeviceStatusSwitchTpl">
+    <!--{if auth("remove")}-->
+<input type="checkbox" value="{{d.token}}" lay-skin="switch" lay-text="{:lang('有效')}|{:lang('失效')}"
+    lay-filter="DeviceStatusSwitch" {{-d.status>0?'checked':''}}>
+<!--{else}-->
+{{-d.status ? '<b class="color-green">{:lang("有效")}</b>' : '<b class="color-red">{:lang("失效")}</b>'}}
+<!--{/if}-->
+</script>
+
+<script type="text/html" id="DeviceInfoTpl">
+    {{# if(d.device_model){ }}
+    <span class="layui-badge layui-bg-gray" title="OS: {{d.device_system}}">{{d.device_model}}</span>
+    {{# }else{ }}
+    <span class="color-gray">-</span>
+    {{# } }}
+</script>
+
+<script type="text/html" id="DeviceLoginTimeTpl">
+    {{# if(d.login_at){ }}
+    {{layui.util.toDateString(d.login_at * 1000, 'yyyy-MM-dd HH:mm')}}
+    {{# }else{ }}
+    -
+    {{# } }}
+</script>
+
+<script type="text/html" id="DeviceToolbar">
+    <!--{if auth("remove")}-->
+<a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="{:lang('确定要退出该设备吗？')}"
+    data-action="{:url('@mini/user.token/remove')}" data-value="token#{{d.token}}">{:lang('退出')}</a>
+<!--{/if}-->
+</script>

@@ -1,0 +1,42 @@
+{
+    "type": "think-admin-plugin",
+    "name": "hlw2326/think-plugin-mp",
+    "homepage": "https://www.hlw2326.com",
+    "description": "小程序通用插件包",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "hlw2326",
+            "email": "1608626143@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">8.2",
+        "ext-json": "*",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "plugin\\mp\\": "src"
+        }
+    },
+    "extra": {
+        "think": {
+            "services": [
+                "plugin\\mp\\Service"
+            ]
+        },
+        "plugin": {
+            "copy": {
+                "stc/database": "database/migrations"
+            }
+        },
+        "config": {
+            "type": "module",
+            "name": "小程序插件",
+            "document": "https://www.hlw2326.com",
+            "description": "小程序通用插件包",
+            "license": []
+        }
+    }
+}

@@ -1,0 +1,58 @@
+<form class="layui-form layui-form-pane form-search" action="{:sysuri()}" onsubmit="return false" method="get" autocomplete="off">
+    <fieldset>
+        <legend>{:lang('条件搜索')}</legend>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('用户ID')}</label>
+            <div class="layui-input-inline">
+                <input name="user_id" value="{$get.user_id|default=''}" placeholder="{:lang('请输入用户ID')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('平台')}</label>
+            <div class="layui-input-inline">
+                <select name="platform" class="layui-select" lay-append-to>
+                    <option value="">-- {:lang('全部')} --</option>
+                    {foreach $platforms as $k => $v}
+                    <option value="{$k}" {if isset($get.platform) && $get.platform == $k}selected{/if}>{$v.label}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('查询状态')}</label>
+            <div class="layui-input-inline">
+                <select name="status" class="layui-select" lay-append-to>
+                    <option value="">-- {:lang('全部')} --</option>
+                    <option value="1" {if isset($get.status) && $get.status === '1'}selected{/if}>{:lang('成功')}</option>
+                    <option value="0" {if isset($get.status) && $get.status === '0'}selected{/if}>{:lang('失败')}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('退积分')}</label>
+            <div class="layui-input-inline">
+                <select name="refunded" class="layui-select" lay-append-to>
+                    <option value="">-- {:lang('全部')} --</option>
+                    <option value="0" {if isset($get.refunded) && $get.refunded === '0'}selected{/if}>{:lang('未退')}</option>
+                    <option value="1" {if isset($get.refunded) && $get.refunded === '1'}selected{/if}>{:lang('已退')}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('查询时间')}</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="create_at" value="{$get.create_at|default=''}" placeholder="{:lang('请选择时间范围')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon layui-icon-search"></i> {:lang('搜 索')}</button>
+        </div>
+
+    </fieldset>
+</form>

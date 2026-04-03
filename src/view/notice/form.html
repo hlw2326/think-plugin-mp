@@ -1,0 +1,115 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="NoticeTable">
+    <div class="layui-card-body padding-left-40">
+        <input type="hidden" name="id" value="{$vo.id|default=''}">
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('基本信息')}</b></legend>
+            <div class="layui-row layui-col-space15">
+
+                <div class="layui-col-xs12">
+                    <span class="help-label"><b>{:lang('目标小程序')}</b>AppID</span>
+                    <div class="layui-textarea help-checks">
+                        <label class="think-checkbox">
+                            <input type="checkbox" id="AppidAllCheck" name="appid_all" value="1" lay-ignore {if !isset($vo.appid) or $vo.appid eq '*'}checked{/if}> {:lang('全部小程序')}
+                        </label>
+                    </div>
+                    <div id="AppidListWrap" class="layui-textarea help-checks" style="margin-top:6px;">
+                        {foreach $mp_list as $appid => $mpname}
+                        <label class="think-checkbox">
+                            <input type="checkbox" name="appid[]" value="{$appid}" lay-ignore {if isset($vo.appid) and $vo.appid neq '*' and strpos(','.$vo.appid.',', ','.$appid.',') !== false}checked{/if}> {$mpname}（{$appid}）
+                        </label>
+                        {/foreach}
+                    </div>
+                </div>
+
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('通知类型')}</b>Type</span>
+                        <select name="type"  lay-append-to>
+                            {foreach $types as $k => $v}
+                            <option value="{$k}" {if isset($vo.type) and $vo.type eq $k}selected{/if}>{$v.label}</option>
+                            {/foreach}
+                        </select>
+                    </label>
+                </div>
+
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('通知标题')}</b>Title</span>
+                        <input name="title" value='{$vo.title|default=""}' vali-name="{:lang('通知标题')}" required placeholder="{:lang('请输入通知标题')}" class="layui-input">
+                    </label>
+                </div>
+
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('通知内容')}</b>Content</span>
+                        <textarea name="content" vali-name="{:lang('通知内容')}" required placeholder="{:lang('请输入通知内容（纯文本）')}" class="layui-textarea" rows="5">{$vo.content|default=''}</textarea>
+                    </label>
+                </div>
+
+            </div>
+        </fieldset>
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge layui-bg-blue">{:lang('跳转配置')}</b></legend>
+            <div class="layui-row layui-col-space15">
+
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('跳转类型')}</b>JumpType</span>
+                        <select name="jump_type" id="JumpTypeSelect" lay-append-to>
+                            {foreach $jump_types as $k => $v}
+                            <option value="{$k}" {if isset($vo.jump_type) and $vo.jump_type eq $k}selected{/if}>{$v.label}</option>
+                            {/foreach}
+                        </select>
+                        <span class="help-block">{:lang('选择「仅展示」时无需填写跳转值')}</span>
+                    </label>
+                </div>
+
+                <div class="layui-col-xs12" id="JumpValueWrap">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('跳转值')}</b>JumpValue</span>
+                        <input name="jump_value" value='{$vo.jump_value|default=""}' id="JumpValueInput" placeholder="{:lang('小程序页面路径、H5地址或其他小程序AppID')}" class="layui-input">
+                    </label>
+                </div>
+
+            </div>
+        </fieldset>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type="submit">{:lang('保存数据')}</button>
+        <button class="layui-btn layui-btn-danger" type="button" data-close>{:lang('取消操作')}</button>
+    </div>
+</form>
+
+<script>
+    $(function () {
+        function toggleAppidList() {
+            if ($('#AppidAllCheck').is(':checked')) {
+                $('#AppidListWrap').hide();
+            } else {
+                $('#AppidListWrap').show();
+            }
+        }
+        toggleAppidList();
+        $('#AppidAllCheck').on('change', toggleAppidList);
+
+        function toggleJumpValue() {
+            var val = $('#JumpTypeSelect').val();
+            if (val === '') {
+                $('#JumpValueWrap').hide();
+                $('#JumpValueInput').removeAttr('required');
+            } else {
+                $('#JumpValueWrap').show();
+                $('#JumpValueInput').attr('required', 'required');
+            }
+        }
+        toggleJumpValue();
+        layui.form.on('select()', function () { toggleJumpValue(); });
+        $('#JumpTypeSelect').on('change', function () { toggleJumpValue(); });
+    });
+</script>

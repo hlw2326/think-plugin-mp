@@ -1,0 +1,86 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="AdTable">
+    <div class="layui-card-body padding-left-40">
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('基本信息')}</b></legend>
+            <div class="layui-row layui-col-space15">
+
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('所属小程序')}</b>AppID</span>
+                        <select name="appid" vali-name="{:lang('所属小程序')}" required lay-append-to>
+                            <option value="">{:lang('请选择小程序')}</option>
+                            {foreach $mp_list as $appid => $mpname}
+                            <option value="{$appid}" {if isset($vo.appid) and $vo.appid eq $appid}selected{/if}>{$mpname}（{$appid}）</option>
+                            {/foreach}
+                        </select>
+                    </label>
+                </div>
+
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('广告类型')}</b>Type</span>
+                        <select name="ad_type" vali-name="{:lang('广告类型')}" required lay-append-to>
+                            <option value="">{:lang('请选择广告类型')}</option>
+                            {foreach $ad_types as $k => $v}
+                            <option value="{$k}" {if isset($vo.ad_type) and $vo.ad_type eq $k}selected{/if}>{$v.label}</option>
+                            {/foreach}
+                        </select>
+                    </label>
+                </div>
+
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('广告名称')}</b>Name</span>
+                        <input name="name" value='{$vo.name|default=""}' vali-name="{:lang('广告名称')}" required placeholder="{:lang('请输入广告单元名称，便于识别')}" class="layui-input">
+                    </label>
+                </div>
+
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('广告单元ID')}</b>adUnitId</span>
+                        <input name="unit_id" value='{$vo.unit_id|default=""}' vali-name="{:lang('广告单元ID')}" required pattern="^adunit-[0-9a-zA-Z]+$" placeholder="{:lang('微信流量主后台生成的广告单元ID，格式如 adunit-xxxxxxxxxxxxxxxx')}" class="layui-input">
+                        <span class="help-block">{:lang('在微信公众平台-流量主-广告单元管理 中创建并获取')}</span>
+                    </label>
+                </div>
+
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('位置标识')}</b>Position</span>
+                        <input name="position" value='{$vo.position|default=""}' vali-name="{:lang('位置标识')}" required placeholder="{:lang('如 home_top / detail_bottom / list_interstitial')}" class="layui-input">
+                        <span class="help-block">{:lang('前端按此标识拉取对应广告单元，同一小程序内唯一')}</span>
+                    </label>
+                </div>
+
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('备注说明')}</b>Remark</span>
+                        <input name="remark" value='{$vo.remark|default=""}' placeholder="{:lang('可选，说明该广告的用途或位置')}" class="layui-input">
+                    </label>
+                </div>
+
+            </div>
+        </fieldset>
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('扩展参数')}</b></legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('扩展参数')}</b>Extra (JSON)</span>
+                        <textarea name="extra" placeholder="{:lang('可选，JSON格式，存储广告个性化配置，如刷新间隔、固定定位等')}" class="layui-textarea" style="height:80px">{$vo.extra|default=''}</textarea>
+                        <span class="help-block">{:lang('可存刷新间隔(interval)、固定定位(fixed)、偏移量(offset)等前端所需配置')}</span>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <input type="hidden" name="id" value="{$vo.id|default=''}">
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type="submit">{:lang('保存数据')}</button>
+        <button class="layui-btn layui-btn-danger" type="button" data-close>{:lang('取消操作')}</button>
+    </div>
+</form>

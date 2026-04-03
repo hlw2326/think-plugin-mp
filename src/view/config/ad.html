@@ -1,0 +1,41 @@
+<form action="{:sysuri()}" class="layui-form layui-card" data-auto="true" method="post">
+    <div class="layui-card-body">
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('广告设置')}</b></legend>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
+                    <div class="layui-form-item">
+                        <span class="help-label"><b>{:lang('开启广告积分')}</b>Ad Points</span>
+                        <div class="layui-textarea help-checks layui-bg-gray ta-pl-15">
+                            {foreach [lang('否'),lang('是')] as $k=>$n}
+                            <input type="radio" name="mini.ad_enabled" value="{$k}" title="{$n}" {if sysconf('mini.ad_enabled') == $k}checked{/if}>
+                            {/foreach}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
+                    <label class="relative block">
+                        <span class="help-label"><b>{:lang('广告奖励积分')}</b>Score</span>
+                        <input class="layui-input" name="mini.ad_score" value='{php}echo sysconf("mini.ad_score"){/php}' required pattern="^(0|[1-9]\d*)$" pattern-error="{:lang('积分须为非负整数')}">
+                        <span class="help-block">{:lang('每次观看广告奖励的积分数量')}</span>
+                    </label>
+                </div>
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
+                    <label class="relative block">
+                        <span class="help-label"><b>{:lang('每日观看上限')}</b>Daily Limit</span>
+                        <input class="layui-input" name="mini.ad_daily_limit" value='{php}echo sysconf("mini.ad_daily_limit"){/php}' required pattern="^(0|[1-9]\d*)$" pattern-error="{:lang('须为非负整数')}">
+                        <span class="help-block">{:lang('每日次数上限，0表示无限制')}</span>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center ta-pb-20">
+        <button class="layui-btn" type="submit">{:lang('保存数据')}</button>
+    </div>
+</form>

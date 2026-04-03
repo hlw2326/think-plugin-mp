@@ -1,0 +1,52 @@
+<form action="{:sysuri()}" class="layui-form layui-card" data-auto="true" method="post">
+    <div class="layui-card-body">
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('客服设置')}</b></legend>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
+                    <div class="layui-form-item">
+                        <span class="help-label"><b>{:lang('开启客服功能')}</b>Service</span>
+                        <div class="layui-textarea help-checks layui-bg-gray ta-pl-15">
+                            {foreach [lang('否'),lang('是')] as $k=>$n}
+                            <input type="radio" name="mini.query_enabled" value="{$k}" title="{$n}" {if sysconf('mini.query_enabled') == $k}checked{/if}>
+                            {/foreach}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
+                    <label class="relative block">
+                        <span class="help-label"><b>{:lang('查询扣积分')}</b>Deduct</span>
+                        <input class="layui-input" name="mini.query_deduct_points" value='{php}echo sysconf("mini.query_deduct_points"){/php}' required pattern="^(0|[1-9]\d*)$" pattern-error="{:lang('须为非负整数')}">
+                        <span class="help-block">{:lang('每次查询扣除积分，0表示免费')}</span>
+                    </label>
+                </div>
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
+                    <label class="relative block">
+                        <span class="help-label"><b>{:lang('每日免费次数')}</b>Free Count</span>
+                        <input class="layui-input" name="mini.query_free_limit" value='{php}echo sysconf("mini.query_free_limit"){/php}' required pattern="^(0|[1-9]\d*)$" pattern-error="{:lang('须为非负整数')}">
+                        <span class="help-block">{:lang('每日免费查询次数，0表示无免费')}</span>
+                    </label>
+                </div>
+                <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
+                    <div class="layui-form-item">
+                        <span class="help-label"><b>{:lang('允许退款')}</b>Refund</span>
+                        <div class="layui-textarea help-checks layui-bg-gray ta-pl-15">
+                            {foreach [lang('否'),lang('是')] as $k=>$n}
+                            <input type="radio" name="mini.query_refund_enabled" value="{$k}" title="{$n}" {if sysconf('mini.query_refund_enabled') == $k}checked{/if}>
+                            {/foreach}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center ta-pb-20">
+        <button class="layui-btn" type="submit">{:lang('保存数据')}</button>
+    </div>
+</form>

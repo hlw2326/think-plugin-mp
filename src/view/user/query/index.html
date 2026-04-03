@@ -1,0 +1,80 @@
+{extend name="../../admin/view/table"}
+
+{block name="button"}
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='user/query/index_search'}
+    <table id="UserQueryTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
+</div>
+
+<label class="layui-hide"><textarea id="PlatformsData">{:json_encode($platforms, JSON_UNESCAPED_UNICODE)}</textarea></label>
+
+<script>
+    $.platformLabel = (function () {
+        var platforms = JSON.parse($('#PlatformsData').text());
+        return function (platform) {
+            var item = platforms[platform] || {label: platform, 'class': 'layui-bg-gray'};
+            return '<span class="layui-badge ' + item['class'] + '">' + item.label + '</span>';
+        };
+    })();
+
+    $(function () {
+        $('#UserQueryTable').layTable({
+            even: true, height: 'full',
+            sort: {field: 'id', type: 'desc'},
+            cols: [[
+                {field: 'id', title: 'ID', width: 70, align: 'center', sort: true},
+                {field: 'user_id', title: '{:lang("用户ID")}', width: 180, align: 'center', templet: '#UserIdTpl'},
+                {field: 'platform', title: '{:lang("平台")}', width: 110, align: 'center', templet: '#PlatformTpl'},
+                {field: 'input_url', title: '{:lang("查询链接")}', minWidth: 200, templet: '#InputUrlTpl'},
+                {field: 'cost_score', title: '{:lang("扣除积分")}', width: 110, align: 'center', templet: '#CostScoreTpl'},
+                {field: 'status', title: '{:lang("状态")}', width: 80, align: 'center', templet: '#StatusTpl'},
+                {field: 'refunded', title: '{:lang("退积分")}', width: 100, align: 'center', templet: '#RefundedTpl'},
+                {field: 'refund_at', title: '{:lang("退还时间")}', width: 160, align: 'center', templet: "<span>{{d.refund_at || '-'}}</span>"},
+                {field: 'create_at', title: '{:lang("查询时间")}', width: 160, align: 'center', sort: true},
+                {toolbar: '#toolbar', title: '{:lang("操作")}', width: 100, align: 'center'}
+            ]]
+        });
+    });
+</script>
+
+
+<script type="text/html" id="UserIdTpl">
+    <a data-open="{:url('@mini/user/index')}?id={{d.user_id}}&spm=m-25-33-34" title="{:lang('查看用户')}" style="cursor:pointer;">{{d.user_id}}</a>
+</script>
+
+<script type="text/html" id="PlatformTpl">
+    {{- $.platformLabel(d.platform) }}
+</script>
+
+<script type="text/html" id="StatusTpl">
+    {{- d.status > 0 ? '<b class="color-green">成功</b>' : '<b class="color-red">失败</b>' }}
+</script>
+
+<script type="text/html" id="CostScoreTpl">
+    {{# if(d.is_vip){ }}
+    <span class="layui-badge layui-bg-cyan">VIP免费</span>
+    {{# }else{ }}
+    <b class="color-orange">-{{d.cost_score}}</b>
+    {{# } }}
+</script>
+
+<script type="text/html" id="RefundedTpl">
+    {{- d.refunded ? '<span class="layui-badge layui-bg-blue">已退积分</span>' : '' }}
+</script>
+
+<script type="text/html" id="InputUrlTpl">
+    <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;" title="{{d.input_url}}">{{d.input_url}}</div>
+</script>
+
+<script type="text/html" id="toolbar">
+    <!--{if auth("refund")}-->
+    {{# if(!d.refunded && d.cost_score > 0){ }}
+    <a class="layui-btn layui-btn-sm layui-btn-warm" data-modal='{:url("refund")}?id={{d.id}}' data-title="{:lang('退积分')}">{:lang('退积分')}</a>
+    {{# } }}
+    <!--{/if}-->
+</script>
+
+{/block}

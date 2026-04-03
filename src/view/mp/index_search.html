@@ -1,0 +1,43 @@
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+
+    <fieldset>
+        <legend>{:lang('条件搜索')}</legend>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">应用名称</label>
+            <div class="layui-input-inline">
+                <input name="name" value="{$get.name|default=''}" placeholder="请输入应用名称" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">appid</label>
+            <div class="layui-input-inline">
+                <input name="appid" value="{$get.appid|default=''}" placeholder="请输入appid" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="status" lay-append-to>
+                    <option value="">-- 全部 --</option>
+                    <option value="1" {if isset($get.status) && $get.status == '1'}selected{/if}>启用</option>
+                    <option value="0" {if isset($get.status) && $get.status == '0'}selected{/if}>禁用</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">创建时间</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="create_at" value="{$get.create_at|default=''}" placeholder="请选择创建时间" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜索</button>
+        </div>
+
+    </fieldset>
+</form>

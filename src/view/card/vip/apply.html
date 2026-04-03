@@ -1,0 +1,43 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card">
+    <div class="layui-card-body padding-left-40">
+        <input type="hidden" name="id" value="{$vo.id|default=''}">
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('卡密信息')}</b></legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('卡密码')}</b>Card Code</span>
+                        <input value="{$vo.card_code|default=''}" disabled class="layui-input">
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('会员天数')}</b>VIP Days</span>
+                        <input value="{$vo.days|default=''}" disabled class="layui-input">
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('使用设置')}</b></legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('用户ID')}</b>User ID</span>
+                        <input type="number" min="1" name="user_id" value="" required vali-name="{:lang('用户ID')}" placeholder="{:lang('请输入要使用该卡密的用户ID')}" class="layui-input">
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type="submit">{:lang('确认使用')}</button>
+        <button class="layui-btn layui-btn-danger" type="button" data-close>{:lang('取消')}</button>
+    </div>
+</form>

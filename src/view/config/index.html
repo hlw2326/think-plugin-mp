@@ -1,0 +1,23 @@
+{extend name="../../admin/view/main"}
+
+{block name="button"}
+<!--{if auth("@admin/super")}-->
+<button data-load='{:url("mini/worker/reload")}' class='layui-btn layui-btn-sm layui-btn-primary'>{:lang('重载Worker')}</button>
+<!--{/if}-->
+{/block}
+
+{block name="content"}
+<div class="layui-tab layui-tab-card">
+    <ul class="layui-tab-title notselect">
+        <li {if !isset($get.tab) || $get.tab eq 'ad'}class="layui-this"{/if} data-open="{:url('index')}?tab=ad">{:lang('广告设置')}</li>
+        <li {if isset($get.tab) && $get.tab eq 'query'}class="layui-this"{/if} data-open="{:url('index')}?tab=query">{:lang('客服设置')}</li>
+    </ul>
+    <div class="layui-card ta-pt-20">
+        {if !isset($get.tab) || $get.tab eq 'ad'}
+            {include file='config/ad'}
+        {elseif $get.tab eq 'query'}
+            {include file='config/query'}
+        {/if}
+    </div>
+</div>
+{/block}

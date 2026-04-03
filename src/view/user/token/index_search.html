@@ -1,0 +1,64 @@
+<form class="layui-form layui-form-pane form-search" action="{:sysuri()}" onsubmit="return false" method="get" autocomplete="off">
+    <input type="hidden" name="user_id" value="{$get.user_id|default=''}">
+    <fieldset>
+        <legend>{:lang('条件搜索')}</legend>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">UserID</label>
+            <div class="layui-input-inline">
+                <input name="user_id" value="{$get.user_id|default=''}" placeholder="{:lang('用户ID')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('手机型号')}</label>
+            <div class="layui-input-inline">
+                <input name="device_model" value="{$get.device_model|default=''}" placeholder="{:lang('模糊搜索型号')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('状态')}</label>
+            <div class="layui-input-inline">
+                <select name="status" class="layui-select" lay-append-to>
+                    <option value="">-- {:lang('全部')} --</option>
+                    <option value="1" {if isset($get.status) && $get.status == '1'}selected{/if}>{:lang('有效')}</option>
+                    <option value="0" {if isset($get.status) && $get.status == '0'}selected{/if}>{:lang('失效')}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('登录时间')}</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="login_at" value="{$get.login_at|default=''}" placeholder="{:lang('请选择时间范围')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">SDK {:lang('版本')}</label>
+            <div class="layui-input-inline">
+                <input name="sdk_version" value="{$get.sdk_version|default=''}" placeholder="{:lang('模糊搜索')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('小程序')}</label>
+            <div class="layui-input-inline">
+                <input name="app_version" value="{$get.app_version|default=''}" placeholder="{:lang('模糊搜索')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">{:lang('渠道')}</label>
+            <div class="layui-input-inline">
+                <input name="app_channel" value="{$get.app_channel|default=''}" placeholder="{:lang('模糊搜索')}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon layui-icon-search"></i> {:lang('搜 索')}</button>
+        </div>
+
+    </fieldset>
+</form>

@@ -1,0 +1,172 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="UserTable">
+    <div class="layui-card-body padding-left-40">
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('基本信息')}</b></legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('昵称')}</b>Nickname</span>
+                        <input name="nickname" value='{$vo.nickname|default=""}' vali-name="{:lang('昵称')}" placeholder="{:lang('请输入昵称')}" class="layui-input">
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('手机号')}</b>Phone</span>
+                        <input name="phone" value='{$vo.phone|default=""}' vali-name="{:lang('手机号')}" pattern="phone" placeholder="{:lang('请输入手机号')}" class="layui-input">
+                    </label>
+                </div>
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('头像')}</b>Avatar</span>
+                        <div class="relative block">
+                            <input class="layui-input" data-tips-image data-tips-hover placeholder="{:lang('请上传头像')}" value='{$vo.avatar_url|default=""}' name="avatar_url">
+                            <a class="input-right-icon layui-icon layui-icon-upload-drag" data-file="btn" data-type="png,jpg,jpeg" data-field="avatar_url"></a>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('微信信息')}</b></legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>OpenID</b></span>
+                        <input value='{$vo.openid|default=""}' class="layui-input" disabled>
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>UnionID</b></span>
+                        <input value='{$vo.unionid|default=""}' class="layui-input" disabled>
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('推荐人')}</b>PID</span>
+                        {notempty name='vo.pid'}
+                        <a data-open="{:url('@mini/user/index')}?id={$vo.pid}" class="layui-badge layui-bg-blue" style="cursor:pointer;" title="{:lang('查看推荐人')}">
+                            {:lang('用户')}#{$vo.pid}
+                        </a>
+                        {else}
+                        <span class="layui-badge layui-bg-gray">{:lang('无')}</span>
+                        {/notempty}
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('账户数据')}</b></legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('会员到期时间')}</b>VIP Time</span>
+                        <input value='{$vo.vip_time|default=""}' class="layui-input" disabled>
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('积分')}</b>Score</span>
+                        <input value='{$vo.score|default="0"}' class="layui-input" disabled>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('登录信息')}</b></legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('本次登录时间')}</b>Login At</span>
+                        <input value='{$vo.login_at|default=""}' class="layui-input" disabled>
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('上次登录时间')}</b>Last Login At</span>
+                        <input value='{$vo.last_login_at|default=""}' class="layui-input" disabled>
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('本次登录IP')}</b>Login IP</span>
+                        <input value='{$vo.login_ip|default=""}' class="layui-input" disabled>
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('上次登录IP')}</b>Last Login IP</span>
+                        <input value='{$vo.last_login_ip|default=""}' class="layui-input" disabled>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('设备信息')}</b></legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('手机型号')}</b>Device</span>
+                        <input value='{$vo.device_model|default="-"}' class="layui-input" disabled>
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('操作系统')}</b>OS</span>
+                        <input value='{$vo.device_system|default="-"}' class="layui-input" disabled>
+                    </label>
+                </div>
+                <div class="layui-col-xs4">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('屏幕分辨率')}</b>Screen</span>
+                        <input value='{if $vo.screen_width > 0}{$vo.screen_width} x {$vo.screen_height}{else}-{/if}' class="layui-input" disabled>
+                    </label>
+                </div>
+                <div class="layui-col-xs4">
+                    <label class="block relative">
+                        <span class="help-label"><b>SDK {:lang('版本')}</b></span>
+                        <input value='{$vo.sdk_version|default="-"}' class="layui-input" disabled>
+                    </label>
+                </div>
+                <div class="layui-col-xs4">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('小程序版本')}</b></span>
+                        <input value='{$vo.app_version|default="-"}' class="layui-input" disabled>
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('来源渠道')}</b>Channel</span>
+                        <input value='{$vo.app_channel|default="-"}' class="layui-input" disabled>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('其他设置')}</b></legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('备注')}</b>Remark</span>
+                        <textarea name="remark" placeholder="{:lang('请输入备注信息（选填）')}" class="layui-textarea">{$vo.remark|default=''}</textarea>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>{:lang('保存数据')}</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="{:lang('确定要取消编辑吗？')}" data-close>{:lang('取消编辑')}</button>
+    </div>
+</form>

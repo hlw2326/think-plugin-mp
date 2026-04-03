@@ -1,0 +1,117 @@
+{extend name="../../admin/view/table"}
+
+{block name="button"}
+<!--{if auth("add")}-->
+<button data-modal='{:url("add")}' data-title="{:lang('添加通知')}" class='layui-btn layui-btn-sm layui-btn-primary'>{:lang('添加通知')}</button>
+<!--{/if}-->
+<!--{if auth("remove")}-->
+<a data-confirm="{:lang('确定要删除这些通知吗？')}" data-table-id="NoticeTable" data-action='{:url("remove")}' data-rule="id#{id}" class='layui-btn layui-btn-sm layui-btn-danger'>{:lang('批量删除')}</a>
+<!--{/if}-->
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='notice/index_search'}
+    <table id="NoticeTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
+</div>
+
+<label class="layui-hide">
+    <textarea id="NoticeTypesData">{:json_encode($types, JSON_UNESCAPED_UNICODE)}</textarea>
+</label>
+<label class="layui-hide">
+    <textarea id="MpListData">{:json_encode($mp_list, JSON_UNESCAPED_UNICODE)}</textarea>
+</label>
+
+<script>
+    $.noticeTypeLabel = (function () {
+        var types = JSON.parse($('#NoticeTypesData').text());
+        return function (type) {
+            var item = types[type] || {label: type, 'class': 'layui-bg-gray'};
+            return '<span class="layui-badge ' + item['class'] + '">' + item.label + '</span>';
+        };
+    })();
+
+    $.mpName = (function () {
+        var list = JSON.parse($('#MpListData').text());
+        return function (appid) {
+            if (!appid || appid === '*') {
+                return '<span class="layui-badge layui-bg-blue">全部小程序</span>';
+            }
+            return appid.split(',').map(function (id) {
+                id = id.trim();
+                return list[id]
+                    ? '<span>' + list[id] + '</span><span class="color-desc" style="font-size:11px">(' + id + ')</span>'
+                    : '<span>' + id + '</span>';
+            }).join('&nbsp;');
+        };
+    })();
+
+    $.jumpTypeLabel = (function () {
+        return function (jump_type) {
+            return jump_type ? jump_type : '<span class="layui-badge layui-bg-gray">{:lang("仅展示")}</span>';
+        };
+    })();
+
+    $(function () {
+        $('#NoticeTable').layTable({
+            even: true, height: 'full',
+            sort: {field: 'sort', type: 'desc'},
+            cols: [[
+                {checkbox: true, fixed: true},
+                {field: 'id', title: 'ID', width: 70, align: 'center', sort: true},
+                {field: 'sort', title: '{:lang("排序")}', width: 120, align: 'center', templet: '#SortInputTpl'},
+                {field: 'appid', title: '{:lang("所属小程序")}', width: 200, align: 'center', templet: '#MpNameTpl'},
+                {field: 'type', title: '{:lang("通知类型")}', width: 120, align: 'center', templet: '#NoticeTypeTpl'},
+                {field: 'title', title: '{:lang("通知标题")}', minWidth: 160},
+                {field: 'jump_type', title: '{:lang("跳转方式")}', width: 130, align: 'center', templet: '#JumpTypeTpl'},
+                {field: 'status', title: '{:lang("状态")}', width: 110, align: 'center', templet: '#StatusSwitchTpl'},
+                {field: 'create_at', title: '{:lang("创建时间")}', width: 160, align: 'center', sort: true},
+                {toolbar: '#toolbar', title: '{:lang("操作面板")}', width: 300, align: 'left'}
+            ]]
+        });
+
+        layui.form.on('switch(StatusSwitch)', function (obj) {
+            var data = {id: obj.value, status: obj.elem.checked > 0 ? 1 : 0};
+            $.form.load("{:url('state')}", data, 'post', function (ret) {
+                if (ret.code < 1) $.msg.error(ret.info, 3, function () {
+                    $('#NoticeTable').trigger('reload');
+                }); else $('#NoticeTable').trigger('reload');
+                return false;
+            }, false);
+        });
+    });
+</script>
+
+<script type="text/html" id="SortInputTpl">
+    <input type="number" min="0" data-blur-number="0" data-action-blur="{:sysuri()}" data-value="id#{{d.id}};action#sort;sort#{value}" data-loading="false" value="{{d.sort}}" class="layui-input text-center">
+</script>
+
+<script type="text/html" id="NoticeTypeTpl">
+    {{- $.noticeTypeLabel(d.type) }}
+</script>
+
+<script type="text/html" id="MpNameTpl">
+    {{- $.mpName(d.appid) }}
+</script>
+
+<script type="text/html" id="JumpTypeTpl">
+    {{- $.jumpTypeLabel(d.jump_type) }}
+</script>
+
+<script type="text/html" id="StatusSwitchTpl">
+    <!--{if auth("state")}-->
+    <input type="checkbox" value="{{d.id}}" lay-skin="switch" lay-text="{:lang('已启用')}|{:lang('已禁用')}" lay-filter="StatusSwitch" {{-d.status>0?'checked':''}}>
+    <!--{else}-->
+    {{-d.status ? '<b class="color-green">{:lang("已启用")}</b>' : '<b class="color-red">{:lang("已禁用")}</b>'}}
+    <!--{/if}-->
+</script>
+
+<script type="text/html" id="toolbar">
+    <!--{if auth("edit")}-->
+    <a class="layui-btn layui-btn-sm" data-title="{:lang('编辑通知')}" data-modal='{:url("edit")}?id={{d.id}}'>{:lang('编 辑')}</a>
+    <!--{/if}-->
+    <!--{if auth("remove")}-->
+    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="{:lang('确定要删除该通知吗？')}" data-action="{:url('remove')}" data-value="id#{{d.id}}">{:lang('删 除')}</a>
+    <!--{/if}-->
+</script>
+{/block}

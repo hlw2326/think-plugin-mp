@@ -1,0 +1,85 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="CardVipTable">
+    <div class="layui-card-body padding-left-40">
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('卡密信息')}</b></legend>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('批次号')}</b>Batch No</span>
+                        <input name="batch_no" value='{$vo.batch_no|default=""}' required vali-name="{:lang('批次号')}" placeholder="{:lang('请输入批次号，用于归类管理')}" class="layui-input">
+                        <span class="help-block color-desc">{:lang('批次号用于归类管理同批次卡密')}</span>
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('卡密码')}</b>Card Code</span>
+                        <input name="card_code" value='{$vo.card_code|default=""}' vali-name="{:lang('卡密码')}" placeholder="{:lang('留空自动生成')}" class="layui-input">
+                        <span class="help-block color-desc">{:lang('留空将自动生成唯一卡密码')}</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('会员天数')}</b>VIP Days</span>
+                        <input type="number" min="1" name="days" value='{$vo.days|default=""}' required vali-name="{:lang('会员天数')}" placeholder="{:lang('请输入会员天数')}" class="layui-input">
+                        <span class="help-block color-desc">{:lang('兑换后延长的会员天数')}</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('最大用户数')}</b>Max Users</span>
+                        <input type="number" min="0" name="max_users" value='{$vo.max_users|default="1"}' vali-name="{:lang('最大用户数')}" placeholder="0" class="layui-input">
+                        <span class="help-block color-desc">{:lang('0表示无限制')}</span>
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('用户使用次数')}</b>User Limit</span>
+                        <input type="number" min="1" name="user_limit" value='{$vo.user_limit|default="1"}' required vali-name="{:lang('用户使用次数')}" placeholder="1" class="layui-input">
+                        <span class="help-block color-desc">{:lang('每个用户可使用次数')}</span>
+                    </label>
+                </div>
+            </div>
+
+        </fieldset>
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('其他设置')}</b></legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('备注')}</b>Remark</span>
+                        <input name="remark" value='{$vo.remark|default=""}' placeholder="{:lang('请输入备注信息（选填）')}" class="layui-input">
+                    </label>
+                </div>
+                <div class="layui-col-xs6">
+                    <div class="help-label"><b>{:lang('启用状态')}</b>Status</div>
+                    <div class="layui-textarea help-checks">
+                        <label class="think-checkbox">
+                            <input type="radio" name="status" value="1" {if !isset($vo.status) or $vo.status eq 1}checked{/if} lay-ignore>{:lang('启 用')}
+                        </label>
+                        <label class="think-checkbox">
+                            <input type="radio" name="status" value="0" {if isset($vo.status) and $vo.status eq 0}checked{/if} lay-ignore>{:lang('禁 用')}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>{:lang('保存数据')}</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="{:lang('确定要取消编辑吗？')}" data-close>{:lang('取消编辑')}</button>
+    </div>
+</form>
